@@ -1,0 +1,54 @@
+-- ================================================
+-- Template generated from Template Explorer using:
+-- Create Procedure (New Menu).SQL
+--
+-- Use the Specify Values for Template Parameters 
+-- command (Ctrl-Shift-M) to fill in the parameter 
+-- values below.
+--
+-- This block of comments will not be included in
+-- the definition of the procedure.
+-- ================================================
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+-- =============================================
+-- Author:		<Author,,Name>
+-- Create date: <Create Date,,>
+-- Description:	<Description,,>
+-- =============================================
+ALTER PROCEDURE Sp_SearchProducts 
+	-- Add the parameters for the stored procedure here
+	@ProductId INT,
+	@ProductName VARCHAR(200),
+	@SupplierId INT =0,
+	@CategoryId INT =0,
+	@QuantityForUnit VARCHAR(100),
+	@UnitPrice INT =0,
+	@UnitsInStock INT =0,
+	@UnitsOnOrder INT =0,
+	@ReOrderLevel INT =0,
+	@Discontinued INT =0
+AS
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    SELECT DISTINCT P.*
+FROM products AS P
+INNER JOIN suppliers AS S ON (P.SupplierID = S.SupplierID AND P.SupplierID = @SupplierId ) OR @SupplierId = 0
+INNER JOIN categories AS C ON (P.CategoryID = C.CategoryID AND P.CategoryID = @CategoryId ) OR @CategoryId = 0
+WHERE 
+	((p.ProductID = @ProductId) or @ProductId = 0)
+	AND	((p.ProductName = @ProductName) or @ProductName = '') 	
+	AND ((p.QuantityPerUnit = @QuantityForUnit) or @QuantityForUnit = '') 
+	AND ((p.UnitPrice =  @UnitPrice) or @UnitPrice = 0) 
+	AND ((p.UnitsInStock = @UnitsInStock) or @UnitsInStock = 0) 
+	AND ((p.UnitsOnOrder = @UnitsOnOrder) or @UnitsOnOrder = 0) 
+	AND ((p.ReOrderLevel = @ReOrderLevel) or @ReOrderLevel = 0)  
+	AND ((p.Discontinued = @Discontinued) or @Discontinued = 0) 
+
+END
+GO
